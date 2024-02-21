@@ -11,11 +11,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import "easymde/dist/easymde.min.css";
 
 import ErrorMessage from '@/app/components/ErrorMessage';
+import Spinner from '@/app/components/Spinner';
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
 const NewIssuePage = () => {
-  const { register, control, handleSubmit, formState: {errors} } = useForm<IssueForm>({
+  const { register, control, handleSubmit, formState: {errors, isSubmitting} } = useForm<IssueForm>({
     resolver: zodResolver(createIssueSchema)
   });
   const router = useRouter();
@@ -51,7 +52,7 @@ const NewIssuePage = () => {
         
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
-            <Button type="submit">Submit New Issue</Button>
+        <Button disabled={isSubmitting} type="submit">Submit New Issue {isSubmitting && <Spinner />}</Button>
       </form>
     </div>
   )
