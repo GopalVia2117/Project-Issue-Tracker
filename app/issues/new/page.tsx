@@ -10,6 +10,8 @@ import { createIssueSchema } from '@/app/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import "easymde/dist/easymde.min.css";
 
+import ErrorMessage from '@/app/components/ErrorMessage';
+
 type IssueForm = z.infer<typeof createIssueSchema>;
 
 const NewIssuePage = () => {
@@ -37,7 +39,7 @@ const NewIssuePage = () => {
             <TextField.Root>
                 <TextField.Input {...register("title")} placeholder="Title"/>
             </TextField.Root>
-        {errors.title && <Text as='p' color='red'>{errors.title.message}</Text>}
+        <ErrorMessage>{errors.title?.message}</ErrorMessage>
       
             <Controller
               name="description"
@@ -47,7 +49,7 @@ const NewIssuePage = () => {
               }
         />
         
-        {errors.description && <Text as='p' color='red'>{errors.description.message}</Text>}
+        <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
             <Button type="submit">Submit New Issue</Button>
       </form>
