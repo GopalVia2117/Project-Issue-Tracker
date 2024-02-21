@@ -12,10 +12,11 @@ import "easymde/dist/easymde.min.css";
 
 import ErrorMessage from '@/app/components/ErrorMessage';
 import Spinner from '@/app/components/Spinner';
+import delay from 'delay';
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
-const NewIssuePage = () => {
+const NewIssuePage = async() => {
   const { register, control, handleSubmit, formState: {errors, isSubmitting} } = useForm<IssueForm>({
     resolver: zodResolver(createIssueSchema)
   });
@@ -30,6 +31,8 @@ const NewIssuePage = () => {
       setError("An unexpected error occurred.");
     }
   });
+
+  await delay(2000);
 
   return (
     <div className="max-w-xl ">
