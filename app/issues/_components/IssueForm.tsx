@@ -2,12 +2,12 @@
 import { issueSchema } from '@/app/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Callout, TextField } from '@radix-ui/themes';
-import dynamic from 'next/dynamic';
 import axios from 'axios';
 import "easymde/dist/easymde.min.css";
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import SimpleMdeReact from 'react-simplemde-editor';
 import { z } from "zod";
 
 import ErrorMessage from '@/app/components/ErrorMessage';
@@ -37,8 +37,6 @@ const IssueForm = async ({ issue }: {issue? : Issue}) => {
     }
   });
 
-  const SimpleMdeReact = dynamic(() => import("react-simplemde-editor"), { ssr: false });
-
   return (
     <div className="max-w-xl ">
       {error && <Callout.Root color="red" className="mb-5">
@@ -48,7 +46,7 @@ const IssueForm = async ({ issue }: {issue? : Issue}) => {
             <TextField.Root>
                 <TextField.Input {...register("title")} defaultValue={issue?.title} placeholder="Title"/>
             </TextField.Root>
-        <ErrorMessage>{errors.title?.message}</ErrorMessage>
+            <ErrorMessage>{errors.title?.message}</ErrorMessage>
       
             <Controller
               name="description"
@@ -57,13 +55,13 @@ const IssueForm = async ({ issue }: {issue? : Issue}) => {
               render={({field}) =>
                 <SimpleMdeReact placeholder="Description" {...field} />
               }
-        />
+            />
         
-        <ErrorMessage>{errors.description?.message}</ErrorMessage>
+            <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
-        <Button disabled={isSubmitting}>
-            {issue ? "Update Issue" : "Submit New Issue"} {isSubmitting && <Spinner />}
-        </Button>
+            <Button disabled={isSubmitting}>
+                {issue ? "Update Issue" : "Submit New Issue"} {isSubmitting && <Spinner />}
+            </Button>
       </form>
     </div>
   )
