@@ -4,19 +4,26 @@ import { EraserIcon } from "@radix-ui/react-icons";
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 
 const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
+  const [error, setError] = useState(false);
   const router = useRouter();
 
   const handleDelete = async () => {
-    await axios.delete("/api/issues/" + issueId);
-    router.push("/issues");
-    router.refresh();
+    try {
+      await axios.delete("/api/issues/" + issueId);
+      router.push("/issues");
+      router.refresh();
+    } catch (err) {
+      setError(true);
+    }
   }
 
   return (
-    <AlertDialog.Root>
+    <>
+      <AlertDialog.Root>
       <AlertDialog.Trigger>
         <Button color="red">
           <EraserIcon/>
@@ -37,8 +44,23 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
         </Flex>
       </AlertDialog.Content>
 
+      </AlertDialog.Root>
+      
+
+      <AlertDialog.Root open={error}>
+      <AlertDialog.Content>
+        <AlertDialog.Title>Error</AlertDialog.Title>
+        <AlertDialog.Description>This action could not be deleted.</AlertDialog.Description>
+        <AlertDialog.Action>
+          <Button onClick={() => setError(false)} color="gray" variant="soft" mt="4">OK</Button>   
+        </AlertDialog.Action>
+      </AlertDialog.Content>
+
     </AlertDialog.Root>
+    </>
   );
 };
 
 export default DeleteIssueButton;
+
+
