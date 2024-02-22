@@ -2,9 +2,19 @@
 
 import { EraserIcon } from "@radix-ui/react-icons";
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
-import Link from "next/link";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+
 
 const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
+  const router = useRouter();
+
+  const handleDelete = async () => {
+    await axios.delete("/api/issues/" + issueId);
+    router.push("/issues");
+    router.refresh();
+  }
+
   return (
     <AlertDialog.Root>
       <AlertDialog.Trigger>
@@ -19,7 +29,7 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
 
         <Flex mt="4" gap="4">
           <AlertDialog.Action>
-            <Button color="red">Confirm Delete</Button>
+            <Button onClick={handleDelete} color="red">Confirm Delete</Button>
           </AlertDialog.Action>
           <AlertDialog.Cancel>
             <Button variant="soft" color="gray">Cancel</Button>
